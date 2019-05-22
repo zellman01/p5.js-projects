@@ -5,10 +5,32 @@ let displayButton;
 let lives = 3, score = 0, correctRow = 0;
 let wait = false, gameOver = false;
 let delay = 500;
+let diff = ["Easy", "Normal", "Hard", "Expert"];
+let diffInd;
+let nextLevel = 25;
 
 function setup() {
   createCanvas(400, 400);
-  requiredButton = BUTTONS[Math.floor(random(0, BUTTONS.length-1))];
+  diffInd = 0;
+  requiredButton = BUTTONS[Math.floor(random(checkDiff()))];
+}
+
+function checkDiff() {
+  let value = 0;
+  switch (diff[diffInd]) {
+    case "Easy":
+      value = 4;
+      break;
+    case "Normal":
+      value = 4+4;
+      break;
+    case "Hard":
+      value = 4+4+3;
+      break;
+    default:
+      value = BUTTONS.length
+  }
+  return value;
 }
 
 function draw() {
@@ -33,15 +55,18 @@ function draw() {
       correctRow = 0;
       updateLives(-1);
       newRequiredKey();
+      diffInd = 0;
       if (lives < 1) {
         gameOver = true;
         requiredButton = "GAME OVER";
       }
       waitSetup();
     }
-    if (correctRow > 50) {
+    if (correctRow > nextLevel) {
       updateLives(1);
       correctRow = 0;
+      if (diffInd < diff.length)
+        diffInd++;
     }
   }
 }
@@ -63,12 +88,13 @@ function updateLives(a) {
 }
 
 function newRequiredKey() {
-  if (prevButton.length >= 3) {
+  if (prevButton.length >= 1 && diffInd === 0 || prevButton.length >= 2 && diffInd === 1 || prevButton.length >= 3 && diffInd >= 2) {
     prevButton.shift();
   }
   prevButton.push(requiredButton);
+  console.log(prevButton);
   do {
-    requiredButton = BUTTONS[Math.floor(random(0, BUTTONS.length-1))];
+    requiredButton = BUTTONS[Math.floor(random(checkDiff()))];
   } while (!checkArray(requiredButton));
 }
 
