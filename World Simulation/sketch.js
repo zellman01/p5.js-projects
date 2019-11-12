@@ -141,7 +141,7 @@ function removePeople() {
   resource1.changeAmount(-50);
   resource1.changeAmount(Math.floor(Math.random() * 80));
   if (findResource("Water").removed())
-    resource1.changeAmount(-1500 + Math.floor(Math.random() * 40));
+    resource1.changeAmount(-(1500 + Math.floor(Math.random() * 40)));
   if (findResource("Trees").removed())
     resource1.changeAmount(-800);
   if (findResource("Grass").removed())
